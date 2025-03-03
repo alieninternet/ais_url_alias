@@ -1,3 +1,24 @@
 #@ais_url_alias
-#@language en, en-gb, en-us
+#@language en, en-gb
+ais_url_alias_help_pref_redirect_type => Specify if the redirection is permanent or temporary. Permanent redirection instructs crawlers, search engines, and browsers that the URL alias is no longer considered canonical and should be updated to the permlink URL. This is useful when migrating from old URLs to new URLs. Permanent redirection will only occur if the site is in the "live" production mode, otherwise only temporary redirection will occur.
 ais_url_alias_installed => Plugin ais_url_alias installed successfully.
+ais_url_alias_pref_custom_1 => Custom field 1
+ais_url_alias_pref_custom_2 => Custom field 2
+ais_url_alias_pref_custom_3 => Custom field 3
+ais_url_alias_pref_custom_4 => Custom field 4
+ais_url_alias_pref_custom_5 => Custom field 5
+ais_url_alias_pref_custom_6 => Custom field 6
+ais_url_alias_pref_custom_7 => Custom field 7
+ais_url_alias_pref_custom_8 => Custom field 8
+ais_url_alias_pref_custom_9 => Custom field 9
+ais_url_alias_pref_custom_10 => Custom field 10
+ais_url_alias_pref_redirect_type => Redirection type
+ais_url_alias_pref_redirect_type_temporary => 302 Found (temporary)
+ais_url_alias_pref_redirect_type_permanent => 301 Moved permanently
+ais_url_alias_prefs_help_custom => Select one or more custom field(s) to be used to store URL aliases.
+ais_url_alias_prefs_title => URL alias plugin preferences
+ais_url_alias_prefs_title_behaviour => Behaviour
+ais_url_alias_prefs_title_custom => Custom fields
+ais_url_alias_prefs_used_field => Used for URL aliases
+#@language en-us
+ais_url_alias_prefs_title_behaviour => Behavior

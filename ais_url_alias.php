@@ -178,6 +178,31 @@ class ais_url_alias
 	
 	return $result;
     }
+ 
+     
+    /**
+     * Plugin options panel event handler
+     *
+     * @param  string $event Textpattern event
+     * @param  string $step  Textpattern step (action)
+     */
+    public function eventPrefs($event, $step) : void
+    {
+	$availableSteps = [
+		'list' => false,
+		'save' => true
+	    ];
+
+	switch (bouncer($step, $availableSteps) ? $step : null) {
+	 case 'save':
+	    $this->panelPrefsSave();
+	    break;
+	    
+	 case 'list':
+	 default:
+	    $this->panelPrefsList();
+	}
+    }
 
     
     /**
@@ -261,8 +286,12 @@ class ais_url_alias
      */
     private function initAdmin() : void
     {
+	// Prepare privileges
+	add_privs(('plugin_prefs.' . $this->event), '1,2'); // Plugin preferences -> Publishers / Managing editors only
+
 	// Register callbacks
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
+	register_callback(array($this, 'eventPrefs'), ('plugin_prefs.' . $this->event));
     }
     
     
@@ -273,6 +302,137 @@ class ais_url_alias
     {
 	$handler = new ais_url_alias();
 	$handler->initAdmin();
+    }
+
+    
+    /**
+     * Plugin preferences panel - list mode
+     * 
+     * @param $message  Message to output
+     */
+    private function panelPrefsList($message = '') : void
+    {
+	$title = $this->t('prefs_title');
+	pagetop($title, $message);
+	$pageContent = '';
+	
+	// Build the page title
+	$titleContent =
+	  tag(hed($title, 1, ['class' => 'txp-heading']),
+	      'div',
+	      ['class' => 'txp-layout-1col']);
+	
+	// Fetch/default preferences
+	$this->getPrefs();
+
+	// Behaviour fields
+	$formContentBehaviour =
+	  inputLabel(self::PREF_NAME_REDIRECT_PERMANENT,
+		     selectInput(self::PREF_NAME_REDIRECT_PERMANENT,
+				 ['0' => $this->t('pref_redirect_type_temporary'),
+				  '1' => $this->t('pref_redirect_type_permanent')],
+				 ($this->redirectPermanent ? '1' : '0')), 
+		     'ais_url_alias_pref_redirect_type',
+		     'ais_url_alias_help_pref_redirect_type');
+
+	// Custom field checkbox fields
+	$formContentCustom = '';
+	for ($i = 1; $i <= self::MAX_CUSTOM_FIELD_NUM; ++$i) {
+	    $fieldName = (self::PREF_NAME_CUSTOM_FIELDS . '_' . $i);
+	    $formContentCustom .=
+	      inputLabel($fieldName,
+			 checkbox($fieldName, 1, in_array($i, $this->customFields)),
+			 ('ais_url_alias_pref_custom_' . $i));
+	}
+	
+	// Build behaviour group
+	$formTitleBehaviour = $this->t('prefs_title_behaviour');
+	$formIDBehaviour = 'ais_url_alias_pref_group_behaviour';
+	$formTabBehaviour =
+	  tag(href($formTitleBehaviour,
+		   ('#' . $formIDBehaviour),
+		   ['data-txp-pane' => $formIDBehaviour,
+		    'data-txp-token' => md5($formIDBehaviour . form_token() . get_pref('blog_uid'))]),
+	      'li');
+	$formGroupBehaviour =
+	  tag((hed($formTitleBehaviour, 2, ['id' => 'ais_url_alias_pref_group_behaviour-label']) .
+	       $formContentBehaviour), 
+	      'section',
+	      ['class' => 'txp-tabs-vertical-group',
+	       'id' => $formIDBehaviour,
+	       'aria-labelledby' => 'ais_url_alias_pref_group_behaviour-label']);
+	
+	// Build custom fields group
+	$formTitleCustom = $this->t('prefs_title_custom');
+	$formIDCustom = 'ais_url_alias_pref_group_custom';
+	$formTabCustom = 
+	  tag(href($formTitleCustom,
+		   ('#' . $formIDCustom),
+		   ['data-txp-pane' => $formIDCustom,
+		    'data-txp-token' => md5($formIDCustom . form_token() . get_pref('blog_uid'))]),
+	      'li');
+	$formGroupCustom = 
+	  tag((hed($formTitleCustom, 2, ['id' => 'ais_url_alias_pref_group_custom-label']) .
+	       graf($this->t('prefs_help_custom')) .
+	       $formContentCustom), 
+	      'section', 
+	      ['class' => 'txp-tabs-vertical-group',
+	       'id' => $formIDCustom,
+	       'aria-labelledby' => 'ais_url_alias_pref_group_custom-label']);
+	
+	// Collate tab section (including the save button)
+	$formTabContent =
+	  tag((wrapGroup('ais_url_alias_prefs',
+			 tag(($formTabBehaviour .
+			      $formTabCustom),
+			     'ul',
+			     ['class' => 'switcher-list']),
+			 'tab_preferences') .
+	       graf(fInput('submit', 'Submit', gTxt('save'), 'publish'), array('class' => 'txp-save'))),
+	      'div',
+	      ['class' => 'txp-layout-4col-alt']);
+	
+	// Collate group content
+	$formGroupContent =
+	  tag(($formGroupBehaviour .
+	       $formGroupCustom),
+	      'div',
+	      ['class' => 'txp-layout-4col-3span']);
+	
+	// Collate the form content, adding event and step hidden fields
+	$formContent =
+	  ($formTabContent .
+	   $formGroupContent .
+	   eInput('plugin_prefs.' . $this->event) .
+	   sInput('save'));
+	
+	// Wrap the content in an outer container and a form
+	$pageContent = 
+	  form(tag(($titleContent . $formContent), 'div', ['class' => 'txp-layout']), 
+	       '',
+	       '',
+	       'post', 
+	       'txp-prefs', 
+	       '', 
+	       ($this->event . '_prefs_form'));
+	
+	// Output the page
+	echo $pageContent;
+    }
+    
+    
+    /**
+     * Plugin preferences panel - save mode
+     * 
+     * Valid values are saved locally so if there is an error they don't get reset as the UI is reloaded
+     */
+    private function panelPrefsSave() : void
+    {
+	$ok = true;
+	$message = '';
+	
+        // TODO: This
+	$this->panelPrefsList($message);
     }
     
     
