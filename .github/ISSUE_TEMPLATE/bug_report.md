@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 **To Reproduce**
-Include example code here, and if possible the URL to the feed you were reading, or a similar feed that exhibits the same fault with the example code.
+Include plugin parameters, and the URL alias you were trying.
 
 **Expected behavior**
 A clear and concise description of what you expected to be output.
