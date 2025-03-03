@@ -32,7 +32,7 @@
 // Test mode of operation
 switch (txpinterface) {
  case 'admin':
-    // TODO: This
+    ais_url_alias::newAdmin();
     break;
     
  case 'public':
@@ -146,6 +146,38 @@ class ais_url_alias
 	    }
 	}
     }
+        
+    
+    /**
+     * Lifecycle event handler
+     *      
+     * @param  string $event Textpattern event
+     * @param  string $step  Textpattern step (action)
+     * @return string        Success/failure message
+     */
+    public function eventLifecycle($event, $step) : string
+    {
+	$result = '';
+	
+	switch ($step) {
+	 case 'installed':
+	    $result = $this->t('installed');
+	    break;
+	    
+	 case 'deleted':
+	    // Wipe preferences for this module to clean up the database
+	    remove_pref(null, $this->event);
+	    break;
+	    
+	 case 'disabled':
+	 case 'downgraded':
+	 case 'enabled':
+	 case 'upgraded':
+	 default:
+	}
+	
+	return $result;
+    }
 
     
     /**
@@ -222,6 +254,26 @@ class ais_url_alias
 	    }
 	}
     }
+
+    
+    /**
+     * Initialise for admin
+     */
+    private function initAdmin() : void
+    {
+	// Register callbacks
+        register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
+    }
+    
+    
+    /**
+     * Create a new instance for admin mode
+     */
+    static public function newAdmin() : void
+    {
+	$handler = new ais_url_alias();
+	$handler->initAdmin();
+    }
     
     
     /**
@@ -264,5 +316,19 @@ class ais_url_alias
 	}
 	
 	return $where;
+    }
+    
+    
+    /**
+     * Fetch translated text based on the provided key
+     * 
+     * @param  string $key    Text key
+     * @param  array  $attr   Text substitutions
+     * @param  bool   $escape HTML escape the attributes
+     * @return string         The translated text
+     */
+    private function t(string $key, array $attr = [], bool $escape = true) : string
+    {
+	return gTxt(('ais_url_alias_' . $key), $attr, ($escape ? 'html' : ''));
     }
 }
