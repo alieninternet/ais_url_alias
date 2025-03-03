@@ -178,8 +178,8 @@ class ais_url_alias
 	
 	return $result;
     }
- 
-     
+    
+    
     /**
      * Plugin options panel event handler
      *
@@ -431,7 +431,52 @@ class ais_url_alias
 	$ok = true;
 	$message = '';
 	
-        // TODO: This
+	// Get existing preferences
+	$this->getPrefs();
+	$oldCustomFields = $this->customFields;
+	$oldRedirectPermament = $this->redirectPermanent;
+
+	// Fetch custom field toggles
+	$newCustomFields = [];
+	for ($i = 1; $i <= self::MAX_CUSTOM_FIELD_NUM; ++$i) {
+	    $postField = gps(self::PREF_NAME_CUSTOM_FIELDS . '_' . $i);
+	    // Is this one here and set?
+	    if (isset($postField) &&
+		!empty($postField) &&
+		is_numeric($postField) &&
+		($postField == '1')) {
+		$newCustomFields[] = $i;
+	    }
+	}
+	$this->customFields = $newCustomFields;
+	
+	// Permanent redirect flag
+	$postField = gps(self::PREF_NAME_REDIRECT_PERMANENT);
+	if (isset($postField)) {
+	    // Validate
+	    if (is_numeric($postField) &&
+		($postField >= 0) &&
+		($postField <= 1)) {
+		$this->redirectPermanent = ($postField == 1);
+	    } else {
+		$ok = false;
+		$message .= tag($this->t('error_invalid_redirect_type'), 'p');
+	    }
+	}
+	
+	// If everything is okay, we can save
+	if ($ok) {
+	    if ($this->customFields != $oldCustomFields) {
+		set_pref(self::PREF_NAME_CUSTOM_FIELDS, implode(',', $this->customFields), $this->event, PREF_HIDDEN, '');
+	    }
+	    
+	    if ($this->redirectPermanent != $oldRedirectPermanent) {
+		set_pref(self::PREF_NAME_REDIRECT_PERMANENT, $this->redirectPermanent, $this->event, PREF_HIDDEN, '');
+	    }
+
+	    $message = gTxt('preferences_saved');
+	}
+	
 	$this->panelPrefsList($message);
     }
     
