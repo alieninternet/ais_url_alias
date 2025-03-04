@@ -1,7 +1,7 @@
 {
   "name": "alieninternet/ais_url_alias",
   "description": "URL aliases for Textpattern",
-  "keywords": ["textpattern", "plugin", "url", "alias", "permlink"],
+  "keywords": ["textpattern", "plugin", "url", "alias", "permalink"],
   "homepage": "https://github.com/alieninternet/ais_url_alias",
   "license": "GPL-3.0",
   "type": "textpattern-plugin",
