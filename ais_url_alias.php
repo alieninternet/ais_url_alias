@@ -74,6 +74,7 @@ class ais_url_alias
      */
     const DIAG_ERROR = 'e';
     const DIAG_INFO = 'i';
+    const DIAG_SUCCESS = 's';
     const DIAG_WARNING = 'w';
     
     
@@ -217,7 +218,7 @@ class ais_url_alias
 						      false)];
 			    }
 			} else {
-			    $output[] = [self::DIAG_INFO, $this->t('diag_no_duplicate_aliases')];
+			    $output[] = [self::DIAG_SUCCESS, $this->t('diag_no_duplicate_aliases')];
 			}
 			
 			// Check for invalid values
@@ -233,7 +234,7 @@ class ais_url_alias
 						      false)];
 			    }
 			} else {
-			    $output[] = [self::DIAG_INFO, $this->t('diag_no_invalid_alias_format')];
+			    $output[] = [self::DIAG_SUCCESS, $this->t('diag_no_invalid_alias_format')];
 			}
 		    }
 		}
@@ -254,6 +255,10 @@ class ais_url_alias
 			
 		     case self::DIAG_WARNING:
 			$cssClass = 'warning';
+			break;
+			
+		     case self::DIAG_SUCCESS:
+			$cssClass = 'success';
 			break;
 			
 		     case self::DIAG_INFO:
