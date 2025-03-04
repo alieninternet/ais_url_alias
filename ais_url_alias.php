@@ -174,6 +174,8 @@ class ais_url_alias
      */
     public function eventDiag($event, $step) : void
     {
+	global $DB;
+	
 	// Ensure we have the right event/step
 	if (($event === 'diag') &&
 	    ($step !== 'steps')) {
@@ -186,8 +188,45 @@ class ais_url_alias
 		$output[] = [self::DIAG_ERROR, 
 			     ($this->t('error_no_custom_fields') . ' ' .
 			      sLink(('plugin_prefs.' . $this->event), 'edit', $this->t('see_plugin_configuration')))];
+	    } else {
+		// These checks requires MySQL version >= 8.0 because they use CTEs (SQL:1999)
+		if (explode('.', $DB->version)[0] >= 8) {
+		    // Build a CTE to help flatten the article IDs and URL alias fields - we'll use it a few times
+		    $cte = '';
+		    foreach ($this->customFields as $customField) {
+			if (is_numeric($customField)) {
+			    if (!empty($sql)) {
+				$cte .= ' UNION ALL ';
+			    }
+			    
+			    $cte .= ('SELECT ID, custom_' . $customField . ' FROM ' . safe_pfx('textpattern'));
+			}
+		    }
+
+		    // Ensure we have a CTE - we should, since custom fields should be configured
+		    if (!empty($cte)) {
+			$cteName = rtrim(base64_encode(md5(microtime())), "=");
+			$cte = ('WITH ' . $cteName . ' (ID, C) AS (' . $cte . ') ');
+
+			// Check for aliases used by other articles
+			$resultSet = safe_query($cte . 'SELECT DISTINCT A.ID AS ID, A.C AS C FROM ' . $cteName . 
+						' AS A INNER JOIN ' . $cteName . ' AS B ON (A.C = B.C) AND (A.ID <> B.ID) ORDER BY A.ID ASC;');
+			if ($resultSet &&
+			    (numRows($resultSet) > 0)) {
+			    while ($row = nextRow($resultSet)) {
+				$output[] = [self::DIAG_ERROR,
+					     $this->t('error_duplicate_alias',
+						      ['{article}' => eLink('article', 'edit', 'ID', $row['ID'], $row['ID']),
+						       '{alias}' => htmlspecialchars($row['C'])],
+						      false)];
+			    }
+			} else {
+			    $output[] = [self::DIAG_INFO, $this->t('diag_no_duplicate_aliases')];
+			}
+		    }
+		}
 	    }
-		
+	    
 	    // Collate diagnostics results if something was created
 	    if (!empty($output)) {
 		$content = '';
