@@ -1,4 +1,4 @@
-# ais_url_alias - URL aliases for Textpattern.
+# ais_url_alias - URL aliases for Textpattern
 
 This plugin allows you to configure URL aliases for articles, also known as URI aliases, friendly paths, legacy paths, or legacy permalinks.
 
