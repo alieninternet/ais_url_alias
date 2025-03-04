@@ -146,7 +146,40 @@ class ais_url_alias
 	    }
 	}
     }
-        
+    
+    
+    /**
+     * Event handler for CSS header injection
+     *
+     * @param  string $event Textpattern event
+     * @param  string $step  Textpattern step (action)
+     * @return string        Success/failure message
+     */
+    public function eventHead($event, $step) : void
+    {
+	global $event;
+	$css = [];
+	$eventTokens = explode('.', $event);
+	
+	switch ($eventTokens[0]) {
+	 // Adjust the custom fields in the preferences to show they are used for URL aliases
+	 case 'prefs':
+	    $this->getPrefs();
+	    foreach ($this->customFields as $customField) {
+		if (is_numeric($customField)) {
+		    $css[] = ('div#prefs-custom_' . $customField . '_set label:after{display:block;font-size:x-small;font-style:italic;content:"' . $this->t('prefs_used_field') . '";}');
+		}
+	    }
+	    break;
+	}
+	
+	if (!empty($css)) {
+	    echo tag(implode($css),
+		     'style',
+		     ['type' => 'text/css']);
+	}
+    }
+    
     
     /**
      * Lifecycle event handler
@@ -290,6 +323,7 @@ class ais_url_alias
 	add_privs(('plugin_prefs.' . $this->event), '1,2'); // Plugin preferences -> Publishers / Managing editors only
 
 	// Register callbacks
+	register_callback(array($this, 'eventHead'), 'admin_side', 'head_end');
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
 	register_callback(array($this, 'eventPrefs'), ('plugin_prefs.' . $this->event));
     }
