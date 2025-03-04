@@ -372,14 +372,19 @@ h2. History
 
 h3. Version 0.2
 
-* Code quality fixes
+p. New functionality:
+
 * Added German translation (["jools-r":https://github.com/jools-r])
 * Added French translation (["cara-tm":https://github.com/cara-tm])
 * Added Dutch translation
 
+p. Fixes:
+
+* Code quality fixes
+
 h3. Version 0.1
 
-* Initial version.
+p. Initial version.
 
 h2. Author
 
