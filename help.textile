@@ -372,11 +372,12 @@ h2. History
 
 h3. Version 0.2
 
-p. TODO
+* Code quality fixes
+* Added German translation
 
 h3. Version 0.1
 
-p. Initial version.
+* Initial version.
 
 h2. Author
 
