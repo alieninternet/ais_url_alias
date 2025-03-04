@@ -438,8 +438,8 @@ class ais_url_alias
 	}
 	
 	if (!isset($this->redirectPermanent)) {
-	    $redirectPermament = get_pref(self::PREF_NAME_REDIRECT_PERMANENT, self::PREF_DEFAULT_REDIRECT_PERMANENT);
-	    $this->redirectPermament = ((is_numeric($redirectPermanent) && ($redirectPermament == 1)) ? true : false);
+	    $redirectPermanent = get_pref(self::PREF_NAME_REDIRECT_PERMANENT, self::PREF_DEFAULT_REDIRECT_PERMANENT);
+	    $this->redirectPermanent = ((is_numeric($redirectPermanent) && ($redirectPermanent == 1)) ? true : false);
 	}
 	
 	if (!isset($this->showArticleCustomFieldValidity)) {
