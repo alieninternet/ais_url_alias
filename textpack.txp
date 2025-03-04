@@ -2,7 +2,6 @@
 #@language en, en-gb
 ais_url_alias_diag_no_duplicate_aliases => No duplicate URL aliases found.
 ais_url_alias_diag_no_invalid_alias_format => No URL aliases with an invalid format found.
-ais_url_alias_diag_not_checked_conflicts => Enable high detail to check URL alias path conflicts.
 ais_url_alias_diag_title => URL alias plugin diagnostics
 ais_url_alias_error_duplicate_alias => Article <strong>{article}</strong> contains a URL alias used by another article (<strong>{alias}</strong>).
 ais_url_alias_error_invalid_alias_format => Article <strong>{article}</strong> contains a URL alias with an invalid format (<strong>{alias}</strong>).
