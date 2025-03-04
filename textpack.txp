@@ -1,8 +1,10 @@
 #@ais_url_alias
 #@language en, en-gb
 ais_url_alias_diag_no_duplicate_aliases => No duplicate URL aliases found.
+ais_url_alias_diag_no_invalid_alias_format => No URL aliases with an invalid format found.
 ais_url_alias_diag_title => URL alias plugin diagnostics
 ais_url_alias_error_duplicate_alias => Article <strong>{article}</strong> contains a URL alias used by another article (<strong>{alias}</strong>).
+ais_url_alias_error_invalid_alias_format => Article <strong>{article}</strong> contains a URL alias with an invalid format (<strong>{alias}</strong>).
 ais_url_alias_error_invalid_redirect_type => Invalid redirection type specified
 ais_url_alias_error_no_custom_fields => No custom fields have been configured. 
 ais_url_alias_help_pref_redirect_type => Specify if the redirection is permanent or temporary. Permanent redirection instructs crawlers, search engines, and browsers that the URL alias is no longer considered canonical and should be updated to the permlink URL. This is useful when migrating from old URLs to new URLs. Permanent redirection will only occur if the site is in the "live" production mode, otherwise only temporary redirection will occur.

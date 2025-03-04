@@ -223,6 +223,22 @@ class ais_url_alias
 			} else {
 			    $output[] = [self::DIAG_INFO, $this->t('diag_no_duplicate_aliases')];
 			}
+			
+			// Check for invalid values
+			$resultSet = safe_query($cte . 'SELECT DISTINCT ID, C FROM ' . $cteName . 
+						' WHERE C NOT REGEXP \'' . safe_escape(self::REGEX_URL_ALIAS_PATH) . '\' ORDER BY ID ASC;');
+			if ($resultSet &&
+			    (numRows($resultSet) > 0)) {
+			    while ($row = nextRow($resultSet)) {
+				$output[] = [self::DIAG_ERROR,
+					     $this->t('error_invalid_alias_format',
+						      ['{article}' => eLink('article', 'edit', 'ID', $row['ID'], $row['ID']),
+						       '{alias}' => htmlspecialchars($row['C'])],
+						      false)];
+			    }
+			} else {
+			    $output[] = [self::DIAG_INFO, $this->t('diag_no_invalid_alias_format')];
+			}
 		    }
 		}
 	    }
