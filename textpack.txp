@@ -94,3 +94,37 @@ ais_url_alias_prefs_title_behaviour => Comportement
 ais_url_alias_prefs_title_custom => Champs personnalisés
 ais_url_alias_prefs_used_field => Utilisé pour les alias d'URL
 ais_url_alias_see_plugin_configuration => Voir la configuration du plugin.
+#@ais_url_alias  
+#@language nl, nl-nl
+ais_url_alias_diag_no_duplicate_aliases => Geen dubbele URL-aliasen gevonden.  
+ais_url_alias_diag_no_invalid_alias_format => Geen URL-aliasen met een ongeldig formaat gevonden.  
+ais_url_alias_diag_title => Diagnostiek van de URL-aliasplugin  
+ais_url_alias_error_duplicate_alias => Artikel <strong>{article}</strong> bevat een URL-alias die door een ander artikel wordt gebruikt (<strong>{alias}</strong>).  
+ais_url_alias_error_invalid_alias_format => Artikel <strong>{article}</strong> bevat een URL-alias met een ongeldig formaat (<strong>{alias}</strong>).  
+ais_url_alias_error_invalid_redirect_type => Ongeldig omleidingstype opgegeven  
+ais_url_alias_error_no_custom_fields => Er zijn geen aangepaste velden geconfigureerd.  
+ais_url_alias_help_pref_redirect_type => Geef op of de omleiding permanent of tijdelijk is. Permanente omleiding geeft crawlers, zoekmachines en browsers aan dat de URL-alias niet langer als canoniek wordt beschouwd en moet worden bijgewerkt naar de permalink-URL. Dit is nuttig bij de migratie van oude naar nieuwe URL's. Permanente omleiding vindt alleen plaats als de site in de "live" productiemodus staat, anders wordt alleen een tijdelijke omleiding gebruikt.  
+ais_url_alias_help_pref_show_article_custom_field_validity => Wanneer ingeschakeld, wordt de geldigheid van de alias weergegeven in het aangepaste veld. Dit helpt om het toevoegen van ongeldige tekens te voorkomen die de URL-alias ongeldig zouden maken. Schakel dit uit als het problemen veroorzaakt met het ontwerp van je thema.  
+ais_url_alias_installed => Plugin ais_url_alias succesvol geïnstalleerd.  
+ais_url_alias_pref_custom_1 => Aangepast veld 1  
+ais_url_alias_pref_custom_2 => Aangepast veld 2  
+ais_url_alias_pref_custom_3 => Aangepast veld 3  
+ais_url_alias_pref_custom_4 => Aangepast veld 4  
+ais_url_alias_pref_custom_5 => Aangepast veld 5  
+ais_url_alias_pref_custom_6 => Aangepast veld 6  
+ais_url_alias_pref_custom_7 => Aangepast veld 7  
+ais_url_alias_pref_custom_8 => Aangepast veld 8  
+ais_url_alias_pref_custom_9 => Aangepast veld 9  
+ais_url_alias_pref_custom_10 => Aangepast veld 10  
+ais_url_alias_pref_redirect_type => Omleidingstype  
+ais_url_alias_pref_redirect_type_temporary => 302 Found (tijdelijk)
+ais_url_alias_pref_redirect_type_permanent => 301 Moved permanently
+ais_url_alias_pref_show_article_custom_field_validity => Toon aliasgeldigheid bij artikelen  
+ais_url_alias_prefs_help_custom => Selecteer een of meer aangepaste velden om URL-aliasen op te slaan.  
+ais_url_alias_prefs_title => Voorkeuren voor de URL-aliasplugin  
+ais_url_alias_prefs_title_behaviour => Gedrag  
+ais_url_alias_prefs_title_custom => Aangepaste velden  
+ais_url_alias_prefs_used_field => Gebruikt voor URL-aliasen  
+ais_url_alias_see_plugin_configuration => Zie pluginconfiguratie.  
+#@language nl-be
+ais_url_alias_help_pref_redirect_type => Geef aan of de omleiding permanent of tijdelijk is. Een permanente omleiding laat zoekmachines, crawlers en browsers weten dat de URL-alias niet langer als canoniek wordt beschouwd en dat deze moet worden aangepast naar de permalink-URL. Dit is nuttig bij de migratie van oude naar nieuwe URL's. Permanente omleiding vindt enkel plaats als de site in de "live" productiemodus staat, anders wordt alleen een tijdelijke omleiding gebruikt.  

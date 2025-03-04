@@ -375,6 +375,7 @@ h3. Version 0.2
 * Code quality fixes
 * Added German translation (["jools-r":https://github.com/jools-r])
 * Added French translation (["cara-tm":https://github.com/cara-tm])
+* Added Dutch translation
 
 h3. Version 0.1
 
