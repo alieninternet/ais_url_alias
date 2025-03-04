@@ -241,6 +241,20 @@ class ais_url_alias
 			} else {
 			    $output[] = [self::DIAG_INFO, $this->t('diag_no_invalid_alias_format')];
 			}
+			
+			// Advanced checks that are more time consuming
+			if ($step === 'high') {
+			    // Loop over all URL to perform more detailed processing
+			    $resultSet = safe_query($cte . 'SELECT DISTINCT ID, C FROM ' . $cteName . ' ORDER BY ID ASC;');
+			    if ($resultSet &&
+				(numRows($resultSet) > 0)) {
+				while ($row = nextRow($resultSet)) {
+				    // TODO: Check if the path conflicts with an article URL
+				}
+			    }
+			} else {
+			    $output[] = [self::DIAG_INFO, $this->t('diag_not_checked_conflicts')];
+			}
 		    }
 		}
 	    }
