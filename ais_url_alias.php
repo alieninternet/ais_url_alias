@@ -2,10 +2,12 @@
 /**
  * ais_url_alias - URL aliases for Textpattern
  *
+ *
  * Technically it's a URI alias plugin since it only really impacts the path bit
  * of the URL, but everyone calls the functionality 'URL alias' for some reason, 
  * which makes the nerd in me very sad.
- * 
+ *
+ *
  * Copyright (C) 2025 Ashley Butcher (Alien Internet Services)
  * 
  * This program is free software: you can redistribute it and/or modify
