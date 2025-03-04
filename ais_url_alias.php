@@ -62,6 +62,7 @@ class ais_url_alias
      */
     const PREF_DEFAULT_CUSTOM_FIELDS = '';
     const PREF_DEFAULT_REDIRECT_PERMANENT = '0';
+    const PREF_DEFAULT_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY = '1';
 
     
     /**
@@ -69,6 +70,7 @@ class ais_url_alias
      */
     const PREF_NAME_CUSTOM_FIELDS = 'ais_url_alias_custom_fields';
     const PREF_NAME_REDIRECT_PERMANENT = 'ais_url_alias_redirect_permanent';
+    const PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY = 'ais_url_alias_show_article_custom_field_validity';
     
     
     /**
@@ -78,6 +80,13 @@ class ais_url_alias
     const HTTP_FOUND_TEXT = 'Found';
     const HTTP_MOVED_PERMANENTLY = 301;
     const HTTP_MOVED_PERMANENTLY_TEXT = 'Moved permanently';
+
+    
+    /**
+     * Regular expressions (validation)
+     */
+     // This pattern follows RFC3986, avoiding a '/' prefix, and forbidding invalid %nn escapes and disallowing #
+    const REGEX_URL_ALIAS_PATH = '^[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@%\\-](?:[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@\\/\\-]|%[0-9a-fA-F]{2})*$';
     
     
     /**
@@ -97,7 +106,8 @@ class ais_url_alias
      */
     private ?array $customFields = null;
     private ?bool $redirectPermanent = null;
-
+    private ?bool $showArticleCustomFieldValidity = null;
+    
     
     /**
      * Constructor
@@ -149,7 +159,7 @@ class ais_url_alias
     
     
     /**
-     * Event handler for CSS header injection
+     * Event handler for CSS/JS header injection
      *
      * @param  string $event Textpattern event
      * @param  string $step  Textpattern step (action)
@@ -159,9 +169,49 @@ class ais_url_alias
     {
 	global $event;
 	$css = [];
+	$js = [];
 	$eventTokens = explode('.', $event);
 	
 	switch ($eventTokens[0]) {
+	 // Add javascript for the article page to dynamically modify the custom fields with validation for URNs
+	 case 'article':
+	    $this->getPrefs();
+	    if (!empty($this->customFields)) {
+		// Escape regex - it needs to be inside javascript, and inside HTML. What a mess.
+		$regex = str_replace('\\', '\\\\', self::REGEX_URL_ALIAS_PATH);
+		$js[] = ('function ais_url_alias_(){if(jQuery){var r="' . $regex . '";');
+		$cssInput = [];
+		$cssInputInvalid = [];
+		$cssInputAfter = [];
+		$cssInputAfterInvalid = [];
+		$cssInputAfterValid = [];
+		foreach ($this->customFields as $customField) {
+		    if (is_numeric($customField)) {
+			// Add pattern to configured custom field for client-side input validation
+			$js[] = ('$("#custom-' . $customField . '").attr("pattern",r);');
+			
+			// Add a class to the custom field for styling (if configured)
+			if ($this->showArticleCustomFieldValidity) {
+			    $js[] = ('$("#custom-' . $customField . '").addClass("' . $this->event . '");');
+			}
+		    }
+		}
+		
+		// Finish JS - trigger on document load and DOM change
+		$js[] = ('}};' .
+			 '$(document).ready(ais_url_alias_);' .
+			 'new (window.MutationObserver||window.WebKitMutationObserver)(ais_url_alias_).observe(document,{subtree:true,childList:true});');
+		
+		// Build CSS if validity should be shown
+		if ($this->showArticleCustomFieldValidity) {
+		    $cssElement = ('input.' . $this->event);
+		    $css[] = ($cssElement . '{padding-right:1.75em;background-repeat:no-repeat;background-position:right center;background-size:1.75em;background-origin:border-box;}' .
+			      $cssElement . ':invalid{text-decoration:#f00 wavy underline !important;background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22red%22%3E%3Cpath d=%22M12 10.59L5.41 4 4 5.41 10.59 12 4 18.59 5.41 20 12 13.41l6.59 6.59L20 18.59 13.41 12 20 5.41 18.59 4z%22/%3E%3C/svg%3E");}' .
+			      $cssElement . ':valid{background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22green%22%3E%3Cpath d=%22M9 16.2l-4.2-4.2 1.4-1.4L9 13.4l8.8-8.8 1.4 1.4L9 16.2z%22/%3E%3C/svg%3E");}}');
+		}
+	    }
+	    break;
+	    
 	 // Adjust the custom fields in the preferences to show they are used for URL aliases
 	 case 'prefs':
 	    $this->getPrefs();
@@ -177,6 +227,12 @@ class ais_url_alias
 	    echo tag(implode($css),
 		     'style',
 		     ['type' => 'text/css']);
+	}
+	
+	if (!empty($js)) {
+	    echo tag(implode($js),
+		     'script',
+		     ['type' => 'text/javascript']);
 	}
     }
     
@@ -236,7 +292,7 @@ class ais_url_alias
 	    $this->panelPrefsList();
 	}
     }
-
+    
     
     /**
      * Get plugin preferences
@@ -255,6 +311,11 @@ class ais_url_alias
 	if (!isset($this->redirectPermanent)) {
 	    $redirectPermament = get_pref(self::PREF_NAME_REDIRECT_PERMANENT, self::PREF_DEFAULT_REDIRECT_PERMANENT);
 	    $this->redirectPermament = ((is_numeric($redirectPermanent) && ($redirectPermament == 1)) ? true : false);
+	}
+	
+	if (!isset($this->showArticleCustomFieldValidity)) {
+	    $showArticleCustomFieldValidity = get_pref(self::PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY, self::PREF_DEFAULT_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY);
+	    $this->showArticleCustomFieldValidity = ((is_numeric($showArticleCustomFieldValidity) && ($showArticleCustomFieldValidity == 1)) ? true : false);
 	}
     }
 
@@ -361,13 +422,18 @@ class ais_url_alias
 
 	// Behaviour fields
 	$formContentBehaviour =
-	  inputLabel(self::PREF_NAME_REDIRECT_PERMANENT,
-		     selectInput(self::PREF_NAME_REDIRECT_PERMANENT,
-				 ['0' => $this->t('pref_redirect_type_temporary'),
-				  '1' => $this->t('pref_redirect_type_permanent')],
-				 ($this->redirectPermanent ? '1' : '0')), 
-		     'ais_url_alias_pref_redirect_type',
-		     'ais_url_alias_help_pref_redirect_type');
+	  (inputLabel(self::PREF_NAME_REDIRECT_PERMANENT,
+		      selectInput(self::PREF_NAME_REDIRECT_PERMANENT,
+				  ['0' => $this->t('pref_redirect_type_temporary'),
+				   '1' => $this->t('pref_redirect_type_permanent')],
+				  ($this->redirectPermanent ? '1' : '0')), 
+		      'ais_url_alias_pref_redirect_type',
+		      'ais_url_alias_help_pref_redirect_type') .
+	   inputLabel(self::PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY,
+		      onoffRadio(self::PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY,
+				 ($this->showArticleCustomFieldValidity ? '1' : '0')),
+		      'ais_url_alias_pref_show_article_custom_field_validity',
+		      'ais_url_alias_help_pref_show_article_custom_field_validity'));
 
 	// Custom field checkbox fields
 	$formContentCustom = '';
@@ -469,6 +535,7 @@ class ais_url_alias
 	$this->getPrefs();
 	$oldCustomFields = $this->customFields;
 	$oldRedirectPermament = $this->redirectPermanent;
+	$oldShowArticleCustomFieldValidity = $this->showArticleCustomFieldValidity;
 
 	// Fetch custom field toggles
 	$newCustomFields = [];
@@ -498,6 +565,17 @@ class ais_url_alias
 	    }
 	}
 	
+	// Show custom field validity on article flag
+	$postField = gps(self::PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY);
+	if (isset($postField)) {
+	    // Validate
+	    if (is_numeric($postField) &&
+		($postField >= 0) &&
+		($postField <= 1)) {
+		$this->showArticleCustomFieldValidity = ($postField == 1);
+	    }
+	}
+	
 	// If everything is okay, we can save
 	if ($ok) {
 	    if ($this->customFields != $oldCustomFields) {
@@ -508,6 +586,10 @@ class ais_url_alias
 		set_pref(self::PREF_NAME_REDIRECT_PERMANENT, $this->redirectPermanent, $this->event, PREF_HIDDEN, '');
 	    }
 
+	    if ($this->showArticleCustomFieldValidity != $oldShowArticleCustomFieldValidity) {
+		set_pref(self::PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY, $this->showArticleCustomFieldValidity, $this->event, PREF_HIDDEN, '');
+	    }
+	    
 	    $message = gTxt('preferences_saved');
 	}
 	

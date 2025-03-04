@@ -2,6 +2,7 @@
 #@language en, en-gb
 ais_url_alias_error_invalid_redirect_type => Invalid redirection type specified
 ais_url_alias_help_pref_redirect_type => Specify if the redirection is permanent or temporary. Permanent redirection instructs crawlers, search engines, and browsers that the URL alias is no longer considered canonical and should be updated to the permlink URL. This is useful when migrating from old URLs to new URLs. Permanent redirection will only occur if the site is in the "live" production mode, otherwise only temporary redirection will occur.
+ais_url_alias_help_pref_show_article_custom_field_validity => When enabled, alias validity with be shown in the custom field. This is useful to avoid adding invalid characters that would render the URL alias invalid. Disable if this is causing problems with your theme design.
 ais_url_alias_installed => Plugin ais_url_alias installed successfully.
 ais_url_alias_pref_custom_1 => Custom field 1
 ais_url_alias_pref_custom_2 => Custom field 2
@@ -16,6 +17,7 @@ ais_url_alias_pref_custom_10 => Custom field 10
 ais_url_alias_pref_redirect_type => Redirection type
 ais_url_alias_pref_redirect_type_temporary => 302 Found (temporary)
 ais_url_alias_pref_redirect_type_permanent => 301 Moved permanently
+ais_url_alias_pref_show_article_custom_field_validity => Show alias validity on articles
 ais_url_alias_prefs_help_custom => Select one or more custom field(s) to be used to store URL aliases.
 ais_url_alias_prefs_title => URL alias plugin preferences
 ais_url_alias_prefs_title_behaviour => Behaviour
