@@ -74,6 +74,14 @@ class ais_url_alias
     
     
     /**
+     * Diagnostic message constants
+     */
+    const DIAG_ERROR = 'e';
+    const DIAG_INFO = 'i';
+    const DIAG_WARNING = 'w';
+    
+    
+    /**
      * HTTP status codes and texts
      */
     const HTTP_FOUND = 302;
@@ -153,6 +161,64 @@ class ais_url_alias
 		// End rendering here
 		ob_flush();
 		exit();
+	    }
+	}
+    }
+    
+    
+    /**
+     * Event handler for installation diagnostics
+     *
+     * @param  string $evt Textpattern event
+     * @param  string $stp Textpattern step (action)
+     */
+    public function eventDiag($event, $step) : void
+    {
+	// Ensure we have the right event/step
+	if (($event === 'diag') &&
+	    ($step !== 'steps')) {
+	    $output = [];
+	    
+	    // TODO: This
+		
+	    // Collate diagnostics results if something was created
+	    if (!empty($output)) {
+		$content = '';
+		
+		foreach ($output as $out) {
+		    $cssClass = '';
+		    
+		    switch ($out[0])
+		    {
+		     case self::DIAG_ERROR:
+			$cssClass = 'error';
+			break;
+			
+		     case self::DIAG_WARNING:
+			$cssClass = 'warning';
+			break;
+			
+		     case self::DIAG_INFO:
+		     default:
+			$cssClass = 'information';
+		    }
+		    
+		    $content .= tag(tag($out[1],
+					'span',
+					['class' => $cssClass]),
+				    'li');
+		}
+
+		// Output diagnostic results HTML snippet
+		if (!empty($content)) {
+		    echo tag(tag((hed($this->t('diag_title'), 2) .
+				  tag($content,
+				      'ul')),
+				 'div',
+				 ['class' => 'txp-layout-1col']),
+			     'div',
+			     ['class' => ('txp-layout ' . $this->event)]);
+		}
 	    }
 	}
     }
@@ -384,6 +450,7 @@ class ais_url_alias
 	add_privs(('plugin_prefs.' . $this->event), '1,2'); // Plugin preferences -> Publishers / Managing editors only
 
 	// Register callbacks
+        register_callback(array($this, 'eventDiag'), 'diag');
 	register_callback(array($this, 'eventHead'), 'admin_side', 'head_end');
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
 	register_callback(array($this, 'eventPrefs'), ('plugin_prefs.' . $this->event));
