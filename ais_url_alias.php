@@ -60,7 +60,7 @@ class ais_url_alias
     /**
      * Preference defaults
      */
-    const PREF_DEFAULT_CUSTOM_FIELDS = '1'; // TODO: Empty this out after testing
+    const PREF_DEFAULT_CUSTOM_FIELDS = '';
     const PREF_DEFAULT_REDIRECT_PERMANENT = '0';
 
     
