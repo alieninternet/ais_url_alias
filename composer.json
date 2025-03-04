@@ -7,9 +7,11 @@
   "type": "textpattern-plugin",
   "support": {
     "issues": "https://github.com/alieninternet/ais_url_alias/issues",
-    "source": "https://github.com/alieninternet/ais_url_alias"
+    "source": "https://github.com/alieninternet/ais_url_alias",
+    "docs": "https://github.com/alieninternet/ais_url_alias/blob/HEAD/help.textile"
   },
   "require": {
+    "php": ">=7.4",
     "textpattern/lock": ">=4.8.0",
     "textpattern/installer": "*"
   }
