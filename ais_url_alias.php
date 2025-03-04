@@ -179,7 +179,14 @@ class ais_url_alias
 	    ($step !== 'steps')) {
 	    $output = [];
 	    
-	    // TODO: This
+	    $this->getPrefs();
+	    
+	    // Check if custom fields have been configured
+	    if (empty($this->customFields)) {
+		$output[] = [self::DIAG_ERROR, 
+			     ($this->t('error_no_custom_fields') . ' ' .
+			      sLink(('plugin_prefs.' . $this->event), 'edit', $this->t('see_plugin_configuration')))];
+	    }
 		
 	    // Collate diagnostics results if something was created
 	    if (!empty($output)) {
