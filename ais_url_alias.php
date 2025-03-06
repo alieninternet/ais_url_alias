@@ -585,6 +585,27 @@ class ais_url_alias
     
     
     /**
+     * Generate the multiedit form for the URL aliases list page
+     * 
+     * @param  int     $page          Page number
+     * @param  string  $sort          Column sorted by
+     * @param  string  $dir           Sorting direction
+     * @param  string  $crit          Search criterion
+     * @param  string  $search_method Search method
+     * @return string                 The generated multiedit HTML
+     */
+    function multieditAliasesForm(int $page, string $sort, string $dir, string $crit, string $searchMethod) : string
+    {
+	$methods = [];
+	
+	$methods['delete'] = $this->t('bulk_remove_alias');
+	
+	return tag(multi_edit($methods, $this->event, 'multiedit', $page, $sort, $dir, $crit, $searchMethod),
+		   'div');
+    }
+    
+    
+    /**
      * Create a new instance for admin mode
      */
     static public function newAdmin() : void
@@ -754,10 +775,10 @@ class ais_url_alias
 		}
 	    
 	        // Finish the table and the content block
-		// TODO: Multiedit controls
 		$contentBlock .= (n.tag_end('tbody') .
 				  n.tag_end('table') .
 				  n.tag_end('div') .
+				  $this->multieditAliasesForm($page, $sort, $dir, $crit, $searchMethod) .
 				  tInput() .
 				  n.tag_end('form'));
 	    }
