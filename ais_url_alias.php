@@ -572,12 +572,52 @@ class ais_url_alias
     {
 	$ok = true;
 	$message = '';
-	$updateCount = 0;
-
-	// TODO: Magic stuff here
+	$selected = ps('selected');
 	
-	$message = $this->t(($ok ? 'bulk_remove_success' : 'bulk_remove_failed'),
-			    ['{count}' => $updateCount]);
+	if (!$selected || !is_array($selected)) {
+	    $this->panelAliasesList();
+	    return;
+	}
+	
+	// Clean-up selection - should be a list of key/value pairs (article ID + custom field number)
+	$selected = array_map(fn($v) => array_map('assert_int', explode('_', $v)),
+			      $selected);
+	$selected = array_filter($selected);
+	
+	// Fetch valid article IDs
+	if (!empty($selected)) {
+	    // Fetch the multiedit method
+	    $method = ps('edit_method');
+	    
+	    switch ($method) {
+	     // Remove alias URLs
+	     case 'delete':
+		// Determine what custom fields are impacted
+		$customFields = array_unique(array_column($selected, 1));
+		$updateCount = 0;
+		
+		// Wipe custom field values for selected articles, per custom field
+		$sql = '';
+		foreach ($customFields as $customField) {
+		    // Find out which article IDs are marked for this custom field
+		    $articleIDs = array_unique(array_column(array_filter($selected, fn($v) => ($v[1] === $customField)), 0));
+		    $ok = (safe_update('textpattern',
+				       ('custom_' . $customField . ' = \'\''),
+				       ('(ID in (' . join(',', $articleIDs) . '))')) &&
+			   $ok);
+		    
+		    if ($ok) {
+			$updateCount += count($articleIDs);
+		    }
+		}
+
+		$message = $this->t(($ok ? 'bulk_remove_success' : 'bulk_remove_failed'),
+				    ['{count}' => $updateCount]);
+	        break;
+	        
+	     default:
+	    }
+	}
 	
 	// Reload the list
 	$this->panelAliasesList($message);
