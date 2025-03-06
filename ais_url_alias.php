@@ -164,6 +164,20 @@ class ais_url_alias
     
     
     /**
+     * Check if CTE support is available in the database engine
+     * 
+     * @return bool True if CTE support is available, otherwise false
+     */
+    private function canCTE()
+    {
+	global $DB;
+	
+	// CTE support was added in MySQL 8.0 (part of SQL:1999)
+	return (explode('.', $DB->version)[0] >= 8);
+    }
+    
+    
+    /**
      * Event handler for installation diagnostics
      *
      * @param  string $evt Textpattern event
@@ -171,8 +185,6 @@ class ais_url_alias
      */
     public function eventDiag($event, $step) : void
     {
-	global $DB;
-	
 	// Ensure we have the right event/step
 	if (($event === 'diag') &&
 	    ($step !== 'steps')) {
@@ -186,8 +198,8 @@ class ais_url_alias
 			     ($this->t('error_no_custom_fields') . ' ' .
 			      sLink(('plugin_prefs.' . $this->event), 'edit', $this->t('see_plugin_configuration')))];
 	    } else {
-		// These checks requires MySQL version >= 8.0 because they use CTEs (SQL:1999)
-		if (explode('.', $DB->version)[0] >= 8) {
+		// These checks requires CTE support in the database engine
+		if ($this->canCTE()) {
 		    // Build a CTE to help flatten the article IDs and URL alias fields - we'll use it a few times
 		    $cteName = rtrim(base64_encode(md5(microtime())), "=");
 		    $sqlCTE = $this->sqlCTE($cteName);
