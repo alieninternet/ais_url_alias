@@ -762,7 +762,7 @@ class ais_url_alias
 		    $urlEditArticle = ['event' => 'article', 'step' => 'edit', 'ID' => $row['ID']];
 		    
 		    // Add this row to a content block
-		    $contentBlock .= (tr(td(fInput('checkbox', 'selected[]', $row['ID'],
+		    $contentBlock .= (tr(td(fInput('checkbox', 'selected[]', ($row['ID'] . '_' . $row['N']),
 					    '', 
 					    'txp-list-col-multi-edit') .
 					 hCell(href($row['ID'], $urlEditArticle, (' title="' . gTxt('edit') . '"')), 
@@ -1021,13 +1021,13 @@ class ais_url_alias
 		    $cte .= ' UNION ALL ';
 		}
 
-		// Select this custom field from the articles table.
-		$cte .= ('SELECT ID,custom_' . $customField . ' FROM ' . safe_pfx('textpattern') . ' WHERE (custom_' . $customField . ' <> \'\')');
+		// Select this custom field from the articles table. Note the 'N' column is the custom field ID for later reference
+		$cte .= ('SELECT ID,' . $customField . ',custom_' . $customField . ' FROM ' . safe_pfx('textpattern') . ' WHERE (custom_' . $customField . ' <> \'\')');
 	    }
 	}
 
 	if (!empty($cte)) {
-	    $cte = ('WITH ' . $cteName . ' (ID,C) AS (' . $cte . ') ');
+	    $cte = ('WITH ' . $cteName . ' (ID,N,C) AS (' . $cte . ') ');
 	}
 	
 	return $cte;
