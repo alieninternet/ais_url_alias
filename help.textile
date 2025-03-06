@@ -374,9 +374,9 @@ h3. Version 0.2
 
 p. New functionality:
 
-* Added German translation (["jools-r":https://github.com/jools-r])
-* Added French translation (["cara-tm":https://github.com/cara-tm])
-* Added Dutch translation
+* Added French translation (["cara-tm":https://github.com/cara-tm]) ^["#1":https://github.com/alieninternet/ais_url_alias/issues/1]^
+* Added German translation (["jools-r":https://github.com/jools-r]) ^["#3":https://github.com/alieninternet/ais_url_alias/issues/3]^
+* Added Dutch translation ^["#2":https://github.com/alieninternet/ais_url_alias/issues/2]^
 
 p. Fixes:
 
