@@ -66,11 +66,11 @@ ais_url_alias_prefs_used_field => Wird für URL-Aliasse verwendet
 ais_url_alias_see_plugin_configuration => Siehe Plugin-Konfiguration
 ais_url_alias_url_aliases = URL-Aliase
 #@language fr, fr-fr
-ais_url_alias_diag_no_duplicate_aliases => Aucun alias d’URL détecté.
+ais_url_alias_diag_no_duplicate_aliases => Aucun alias d’URL dupliqué détecté.
 ais_url_alias_diag_no_invalid_alias_format => Aucun alias d’URL de format invalide détecté.
-ais_url_alias_diag_title => Diagnostics du plugin des alias d’URL
-ais_url_alias_error_duplicate_alias => L’article {article} contient un alias d’URL déjà utilisé par un autre ({alias}).
-ais_url_alias_error_invalid_alias_format => L’article {article} contient un alias d’URL de format invalide ({alias}).
+ais_url_alias_diag_title => Diagnostic du plugin des alias d’URL
+ais_url_alias_error_duplicate_alias => L’article {article} contient un alias d’URL déjà utilisé par un autre article ({alias}).
+ais_url_alias_error_invalid_alias_format => L’article {article} contient un alias d’URL au format invalide ({alias}).
 ais_url_alias_error_invalid_redirect_type => Type de redirection invalide
 ais_url_alias_error_no_custom_fields => Aucun champ personnalisé n’a été configuré.
 ais_url_alias_help_pref_redirect_type => Indique si la redirection est permanente ou temporaire. Une redirection permanente renseigne les robots d'exploration, les moteurs de recherche et les navigateurs que l’alias d’URL n’est plus considéré comme canonique et doit être mis à jour en faveur de l’URL du lien permanent. Utile lors de la migration d'anciennes URL vers de nouvelles. La redirection permanente n'agira que si le site est en mode production ("live"), sinon seule une redirection temporaire aura lieu.
