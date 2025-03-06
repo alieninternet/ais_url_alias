@@ -196,7 +196,7 @@ class ais_url_alias
 				$cte .= ' UNION ALL ';
 			    }
 			    
-			    $cte .= ('SELECT ID, custom_' . $customField . ' FROM ' . safe_pfx('textpattern'));
+			    $cte .= ('SELECT ID, custom_' . $customField . ' FROM ' . safe_pfx('textpattern') . ' WHERE (custom_' . $customField . ' <> \'\')');
 			}
 		    }
 
