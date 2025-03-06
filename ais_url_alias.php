@@ -818,7 +818,7 @@ class ais_url_alias
 	}
 	
 	// If we have a where clause, wrap it up as one clause
-	if ($where) {
+	if (!empty($where)) {
 	    $where = ('(' . $where . ')');
 	}
 	
