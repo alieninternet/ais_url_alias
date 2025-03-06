@@ -189,24 +189,24 @@ class ais_url_alias
 		// These checks requires MySQL version >= 8.0 because they use CTEs (SQL:1999)
 		if (explode('.', $DB->version)[0] >= 8) {
 		    // Build a CTE to help flatten the article IDs and URL alias fields - we'll use it a few times
-		    $cte = '';
+		    $sqlCTE = '';
 		    foreach ($this->customFields as $customField) {
 			if (is_numeric($customField)) {
 			    if (!empty($sql)) {
-				$cte .= ' UNION ALL ';
+				$sqlCTE .= ' UNION ALL ';
 			    }
 			    
-			    $cte .= ('SELECT ID, custom_' . $customField . ' FROM ' . safe_pfx('textpattern') . ' WHERE (custom_' . $customField . ' <> \'\')');
+			    $sqlCTE .= ('SELECT ID, custom_' . $customField . ' FROM ' . safe_pfx('textpattern') . ' WHERE (custom_' . $customField . ' <> \'\')');
 			}
 		    }
 
 		    // Ensure we have a CTE - we should, since custom fields should be configured
-		    if (!empty($cte)) {
+		    if (!empty($sqlCTE)) {
 			$cteName = rtrim(base64_encode(md5(microtime())), "=");
-			$cte = ('WITH ' . $cteName . ' (ID, C) AS (' . $cte . ') ');
+			$sqlCTE = ('WITH ' . $cteName . ' (ID, C) AS (' . $sqlCTE . ') ');
 
 			// Check for aliases used by other articles
-			$resultSet = safe_query($cte . 'SELECT DISTINCT A.ID AS ID, A.C AS C FROM ' . $cteName . 
+			$resultSet = safe_query($sqlCTE . 'SELECT DISTINCT A.ID AS ID, A.C AS C FROM ' . $cteName . 
 						' AS A INNER JOIN ' . $cteName . ' AS B ON (A.C = B.C) AND (A.ID <> B.ID) ORDER BY A.ID ASC;');
 			if ($resultSet &&
 			    (numRows($resultSet) > 0)) {
@@ -222,7 +222,7 @@ class ais_url_alias
 			}
 			
 			// Check for invalid values
-			$resultSet = safe_query($cte . 'SELECT DISTINCT ID, C FROM ' . $cteName . 
+			$resultSet = safe_query($sqlCTE . 'SELECT DISTINCT ID, C FROM ' . $cteName . 
 						' WHERE C NOT REGEXP \'' . safe_escape(self::REGEX_URL_ALIAS_PATH) . '\' ORDER BY ID ASC;');
 			if ($resultSet &&
 			    (numRows($resultSet) > 0)) {
