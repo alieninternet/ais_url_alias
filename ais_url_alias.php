@@ -410,10 +410,15 @@ class ais_url_alias
     public function eventPanelAliases($event, $step) : void
     {
 	$availableSteps = [
-		'list' => false
+		'list' => false,
+		'ais_url_alias_change_pageby' => true
 	    ];
 	
 	switch (bouncer($step, $availableSteps) ? $step : null) {
+	 case 'ais_url_alias_change_pageby':
+	    $this->panelAliasesListPageby();
+	    break;
+	    
 	 case 'list':
 	 default:
 	    $this->panelAliasesList();
@@ -742,7 +747,19 @@ class ais_url_alias
 	$table = new \Textpattern\Admin\Table($this->event);
 	echo $table->render(compact('title', 'total', 'crit'), $searchBlock, null, $contentBlock, $pageBlock);
     }
-
+    
+    
+    /**
+     * Change URL aliases pagination
+     * 
+     * @param $message  Message to output
+     */
+    private function panelAliasesListPageby() : void
+    {
+        \Txp::get('\Textpattern\Admin\Paginator')->change();
+	$this->panelAliasesList();
+    }
+    
     
     /**
      * Plugin preferences panel - list mode
