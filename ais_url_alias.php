@@ -404,7 +404,7 @@ class ais_url_alias
      * @param  string $event Textpattern event
      * @param  string $step  Textpattern step (action)
      */
-    public function eventPrefs($event, $step) : void
+    public function eventPanelPrefs($event, $step) : void
     {
 	$availableSteps = [
 		'list' => false,
@@ -516,7 +516,7 @@ class ais_url_alias
         register_callback(array($this, 'eventDiag'), 'diag');
 	register_callback(array($this, 'eventHead'), 'admin_side', 'head_end');
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
-	register_callback(array($this, 'eventPrefs'), ('plugin_prefs.' . $this->event));
+	register_callback(array($this, 'eventPanelPrefs'), ('plugin_prefs.' . $this->event));
     }
     
     
