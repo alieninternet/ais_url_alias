@@ -8,6 +8,7 @@ h2. List of features
 
 * Use any custom field as a URL alias
 * Allow for multiple aliases, using multiple custom fields
+* View and manage aliases in bulk, saving administration time
 * Diagnostics and debugging available
 * Ideal for migrating articles to Textpattern with existing permalinks
 
@@ -37,9 +38,11 @@ h2. Conceptual overview
 
 p. This plugin aims to repurpose one or more custom field as a _URL alias_. Each configured custom field on an article defines an alternative _URI_ or _path_ for that article.
 
-p. When a page is loaded, the plugin checks to see if an article has a matching URI (path). If so, the browser will be instructed to redirect to the article's official _permalink_ URL and the page will not be rendered.
+p. When a page is loaded, the plugin checks to see if an article has a matching URI (path). If so, the browser will be instructed to redirect to the article's canonical _permalink_ URL and the page will not be rendered.
 
 p. Redirection can be done temporarily (using HTTP response code 302) or permanently (using HTTP response code 301), as configured.
+
+p. Query strings appended to a URL will pass-through the redirection to the canonical URL. Note that a request payload submitted via an HTTP @POST@ will not be passed through to the final canonical URL.
 
 h2. Configuration
 
@@ -62,7 +65,7 @@ p. Note: To avoid mistakes, permanent redirection (HTTP response code 301) will 
 
 h4. Show alias validity on articles
 
-p. When enabled, this will show a visual indication of the validity of URL alias custom field(s) on the article page.
+p. When enabled, this will show a visual indication of the validity of URL alias custom field(s) on the article page. This does not disable validity checks for aliases.
 
 p. Disable this functionality if this causes problems with your admin theme, or conflicts with another plugin.
 
@@ -93,6 +96,24 @@ established for URL paths. In particular:
 * In the special case of spaces, they can also be encoded using a single plus ('@+@')
 
 p. In modern browsers, aliases will be validated for correct formatting prior to saving the article. If the '_show alias validity on articles_' parameter is enabled for the plugin, a visual indication of validity will be shown next to the alias.
+
+h2. Managing URL aliases
+
+p. URL aliases are configured on articles directly, however managing aliases on an article level can create an administrative burden. Fortunately, the plugin offers other tools for the bulk management of URL aliases, as described in this section.
+
+p. Note that MySQL version 8.0 or greater is required for access to these tools.
+
+h3. URL alias overview
+
+p. To view all configured URL aliases, navigate to _Content->URL aliases_. Note that this option will not be available if you are currently on the _Plugins_ page in Textpattern - you must first navigate to another page before this option will become available.
+
+p. On this page, all configured aliases can be viewed, sorted, and filtered, complete with a reference to the alias's article.
+
+p. If a URL alias needs to be modified, click on the article ID or title associated with that URL alias to open the relevant article page.
+
+h3. Bulk removal of URL aliases
+
+p. To remove URL aliases in bulk from the _URL aliases_ page, first select the alias(es) you wish to remove, and then select _Remove aliases_ from the dropdown under the table marked as _With n selected..._. After confirming their removal, the selected aliases will be removed from their respective article(s).
 
 h2. Security
 
@@ -384,6 +405,7 @@ p. New functionality:
 p. Fixes:
 
 * Code quality fixes
+* Fix for permanent redirection not triggering
 * Fix for empty URL aliases showing as duplicates in diagnostics ^["#6":https://github.com/alieninternet/ais_url_alias/issues/6]^
 
 h3. Version 0.1

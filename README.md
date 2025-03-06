@@ -6,6 +6,7 @@ This plugin allows you to configure URL aliases for articles, also known as frie
 
 * Use any custom field as a URL alias
 * Allow for multiple aliases, using multiple custom fields
+* View and manage aliases in bulk, saving administration time
 * Diagnostics and debugging available
 * Ideal for migrating articles to Textpattern with existing permalinks
 
