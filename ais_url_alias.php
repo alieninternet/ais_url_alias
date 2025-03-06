@@ -400,6 +400,18 @@ class ais_url_alias
     
     
     /**
+     * Plugin aliases panel event handler
+     *
+     * @param  string $event Textpattern event
+     * @param  string $step  Textpattern step (action)
+     */
+    public function eventPanelAliases($event, $step) : void
+    {
+	// TODO: This
+    }
+    
+    
+    /**
      * Plugin options panel event handler
      *
      * @param  string $event Textpattern event
@@ -517,11 +529,18 @@ class ais_url_alias
     {
 	// Prepare privileges
 	add_privs(('plugin_prefs.' . $this->event), '1,2'); // Plugin preferences -> Publishers / Managing editors only
-
+	add_privs($this->event, '1,2,3,4'); // URL aliases panel -> Publishers / Managing editors / Copy editor / Staff writer
+	
+	// Register panels
+	if ($this->canCTE()) {
+	    register_tab('content', $this->event, $this->t('url_aliases'));
+	}
+	
 	// Register callbacks
         register_callback(array($this, 'eventDiag'), 'diag');
 	register_callback(array($this, 'eventHead'), 'admin_side', 'head_end');
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
+	register_callback(array($this, 'eventPanelAliases'), $this->event);
 	register_callback(array($this, 'eventPanelPrefs'), ('plugin_prefs.' . $this->event));
     }
     

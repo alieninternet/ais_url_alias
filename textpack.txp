@@ -30,6 +30,7 @@ ais_url_alias_prefs_title_behaviour => Behaviour
 ais_url_alias_prefs_title_custom => Custom fields
 ais_url_alias_prefs_used_field => Used for URL aliases
 ais_url_alias_see_plugin_configuration => See plugin configuration.
+ais_url_alias_url_aliases = URL aliases
 #@language en-us
 ais_url_alias_prefs_title_behaviour => Behavior
 #@language de
@@ -63,6 +64,7 @@ ais_url_alias_prefs_title_behaviour => Verhalten
 ais_url_alias_prefs_title_custom => Benutzerdefinierte Felder
 ais_url_alias_prefs_used_field => Wird für URL-Aliasse verwendet
 ais_url_alias_see_plugin_configuration => Siehe Plugin-Konfiguration
+ais_url_alias_url_aliases = URL-Aliase
 #@language fr, fr-fr
 ais_url_alias_diag_no_duplicate_aliases => Aucun alias d’URL détecté.
 ais_url_alias_diag_no_invalid_alias_format => Aucun alias d’URL de format invalide détecté.
@@ -94,6 +96,7 @@ ais_url_alias_prefs_title_behaviour => Comportement
 ais_url_alias_prefs_title_custom => Champs personnalisés
 ais_url_alias_prefs_used_field => Utilisé pour les alias d'URL
 ais_url_alias_see_plugin_configuration => Voir la configuration du plugin.
+ais_url_alias_url_aliases = Alias d'URL
 #@ais_url_alias  
 #@language nl, nl-nl
 ais_url_alias_diag_no_duplicate_aliases => Geen dubbele URL-aliasen gevonden.  
@@ -126,5 +129,6 @@ ais_url_alias_prefs_title_behaviour => Gedrag
 ais_url_alias_prefs_title_custom => Aangepaste velden  
 ais_url_alias_prefs_used_field => Gebruikt voor URL-aliasen  
 ais_url_alias_see_plugin_configuration => Zie pluginconfiguratie.  
+ais_url_alias_url_aliases = URL-aliasen
 #@language nl-be
 ais_url_alias_help_pref_redirect_type => Geef aan of de omleiding permanent of tijdelijk is. Een permanente omleiding laat zoekmachines, crawlers en browsers weten dat de URL-alias niet langer als canoniek wordt beschouwd en dat deze moet worden aangepast naar de permalink-URL. Dit is nuttig bij de migratie van oude naar nieuwe URL's. Permanente omleiding vindt enkel plaats als de site in de "live" productiemodus staat, anders wordt alleen een tijdelijke omleiding gebruikt.  
