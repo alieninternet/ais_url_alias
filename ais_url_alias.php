@@ -411,12 +411,17 @@ class ais_url_alias
     {
 	$availableSteps = [
 		'list' => false,
+		'multiedit' => true,
 		'ais_url_alias_change_pageby' => true
 	    ];
 	
 	switch (bouncer($step, $availableSteps) ? $step : null) {
 	 case 'ais_url_alias_change_pageby':
 	    $this->panelAliasesListPageby();
+	    break;
+	    
+	 case 'multiedit':
+	    $this->multieditAliases();
 	    break;
 	    
 	 case 'list':
@@ -557,6 +562,25 @@ class ais_url_alias
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
 	register_callback(array($this, 'eventPanelAliases'), $this->event);
 	register_callback(array($this, 'eventPanelPrefs'), ('plugin_prefs.' . $this->event));
+    }
+    
+    
+    /**
+     * Perform a multi-edit action on the aliases list
+     */
+    function multieditAliases()
+    {
+	$ok = true;
+	$message = '';
+	$updateCount = 0;
+
+	// TODO: Magic stuff here
+	
+	$message = $this->t(($ok ? 'bulk_remove_success' : 'bulk_remove_failed'),
+			    ['{count}' => $updateCount]);
+	
+	// Reload the list
+	$this->panelAliasesList($message);
     }
     
     

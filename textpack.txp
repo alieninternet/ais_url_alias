@@ -1,5 +1,8 @@
 #@ais_url_alias
 #@language en, en-gb
+ais_url_alias_bulk_remove_alias => Remove aliases
+ais_url_alias_bulk_remove_failed => Failed to remove aliases ({count} removed).
+ais_url_alias_bulk_remove_success => {count} aliases successfully removed.
 ais_url_alias_diag_no_duplicate_aliases => No duplicate URL aliases found.
 ais_url_alias_diag_no_invalid_alias_format => No URL aliases with an invalid format found.
 ais_url_alias_diag_title => URL alias plugin diagnostics
@@ -37,6 +40,9 @@ ais_url_alias_url_aliases = URL aliases
 #@language en-us
 ais_url_alias_prefs_title_behaviour => Behavior
 #@language de
+ais_url_alias_bulk_remove_alias => Aliase entfernen
+ais_url_alias_bulk_remove_failed => Entfernen der Aliase fehlgeschlagen ({count} entfernt).
+ais_url_alias_bulk_remove_success => {count} Aliase erfolgreich entfernt.
 ais_url_alias_diag_no_duplicate_aliases => Es wurden keine doppelten URL-Aliasse gefunden.
 ais_url_alias_diag_no_invalid_alias_format => Es wurden keine URL-Aliasse mit ungültigem Format gefunden.
 ais_url_alias_diag_title => URL-Alias-Diagnose
@@ -72,6 +78,9 @@ ais_url_alias_see_plugin_configuration => Siehe Plugin-Konfiguration
 ais_url_alias_url_alias = URL-Alias
 ais_url_alias_url_aliases = URL-Aliase
 #@language fr, fr-fr
+ais_url_alias_bulk_remove_alias => Supprimer les alias
+ais_url_alias_bulk_remove_failed => Échec de la suppression des alias ({count} supprimés).
+ais_url_alias_bulk_remove_success => {count} alias supprimés avec succès.
 ais_url_alias_diag_no_duplicate_aliases => Aucun alias d’URL dupliqué détecté.
 ais_url_alias_diag_no_invalid_alias_format => Aucun alias d’URL de format invalide détecté.
 ais_url_alias_diag_title => Diagnostic du plugin des alias d’URL
@@ -107,6 +116,9 @@ ais_url_alias_see_plugin_configuration => Voir la configuration du plugin.
 ais_url_alias_url_alias = Alias d'URL
 ais_url_alias_url_aliases = Alias d'URL
 #@language nl, nl-nl
+ais_url_alias_bulk_remove_alias => aliasen verwijderen
+ais_url_alias_bulk_remove_failed => aliasen verwijderen mislukt ({count} verwijderd).
+ais_url_alias_bulk_remove_success => {count} aliasen succesvol verwijderd.
 ais_url_alias_diag_no_duplicate_aliases => Geen dubbele URL-aliasen gevonden.  
 ais_url_alias_diag_no_invalid_alias_format => Geen URL-aliasen met een ongeldig formaat gevonden.  
 ais_url_alias_diag_title => Diagnostiek van de URL-aliasplugin  
