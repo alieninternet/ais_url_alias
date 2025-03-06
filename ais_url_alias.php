@@ -125,7 +125,7 @@ class ais_url_alias
     /**
      * Bounce to a new URL
      * 
-     * @param  string $newURL   The new URL (location) to bounce to
+     * @param  string $newURL The new URL (location) to bounce to
      */
     private function bounce($newURL) : void
     {
