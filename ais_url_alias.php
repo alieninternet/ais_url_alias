@@ -64,6 +64,8 @@ class ais_url_alias
     /**
      * Preference names
      */
+    const PREF_NAME_ALIASES_SORT_COL = 'ais_url_alias_aliases_sort_col';
+    const PREF_NAME_ALIASES_SORT_DIR = 'ais_url_alias_aliases_sort_dir';
     const PREF_NAME_CUSTOM_FIELDS = 'ais_url_alias_custom_fields';
     const PREF_NAME_REDIRECT_PERMANENT = 'ais_url_alias_redirect_permanent';
     const PREF_NAME_SHOW_ARTICLE_CUSTOM_FIELD_VALIDITY = 'ais_url_alias_show_article_custom_field_validity';
@@ -407,7 +409,15 @@ class ais_url_alias
      */
     public function eventPanelAliases($event, $step) : void
     {
-	// TODO: This
+	$availableSteps = [
+		'list' => false
+	    ];
+	
+	switch (bouncer($step, $availableSteps) ? $step : null) {
+	 case 'list':
+	 default:
+	    $this->panelAliasesList();
+	}
     }
     
     
@@ -552,6 +562,185 @@ class ais_url_alias
     {
 	$handler = new ais_url_alias();
 	$handler->initAdmin();
+    }
+    
+    
+    /**
+     * URL aliases panel - list mode
+     * 
+     * @param $message  Message to output
+     */
+    private function panelAliasesList($message = '') : void
+    {
+	$title = $this->t('url_aliases');
+	pagetop($title, $message);
+
+	// Table fields
+	$tableFields = ['ID', 'Title', 'C'];
+	
+	// Get page query values
+	extract(gpsa(['page', 'sort', 'dir', 'crit', 'search_method']));
+	
+	// Prepare the CTE we'll be using to collapse all configured custom fields together
+	$cteName = rtrim(base64_encode(md5(microtime())), "=");
+	$sqlCTE = $this->sqlCTE($cteName);
+	
+	// Sort field as defined, by preference, or default
+	if (empty($sort)) {
+	    $sort = get_pref(self::PREF_NAME_ALIASES_SORT_COL, 'C');
+	} else {
+	        if (!in_array($sort, $tableFields)) {
+		    $sort = self::PREF_DEFAULT_ALIASES_SORT_COL;
+		}
+	    
+	    set_pref(self::PREF_NAME_ALIASES_SORT_COL, $sort, $this->event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
+	}
+	
+	// Sort direction by preference or by default
+	if (empty($dir)) {
+	    $dir = get_pref(self::PREF_NAME_ALIASES_SORT_DIR, 'DESC');
+	} else {
+	    $dir = ($dir === 'DESC' ? 'DESC' : 'ASC');
+	    set_pref(self::PREF_NAME_ALIASES_SORT_DIR, $dir, $this->event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
+	}
+	
+	// Toggle direction is the opposite of the current direction :)
+	$toggleDir = (($dir === 'DESC') ? 'ASC' : 'DESC');
+
+	// Build SQL sort string
+	switch ($sort) {
+	 // Article ID from CTE
+	 case 'ID':
+	    $sqlSort = "A.ID $dir";
+	    break;
+	 
+	 // Alias from CTE
+	 case 'C':
+	    $sqlSort = "A.$sort $dir, A.ID DESC";
+	    break;
+	 
+	 // Fields from article table
+	 case 'Title':
+	 default:
+	        $sqlSort = "B.$sort $dir, A.ID DESC";
+	}
+
+	// Build filtering
+	$search = new \Textpattern\Search\Filter($this->event, [
+	        'ID' => [
+		    'column' => 'A.ID',
+		    'label' => gTxt('article'),
+		    'type' => 'integer'
+		],
+		'Title' => [
+		    'column' => 'B.Title',
+		    'label' => gTxt('title')
+		],
+		'C' => [
+		    'column' => 'A.C',
+		    'label' => $this->t('url_alias')
+		]
+	    ]);
+	list($sqlCriteria, $crit, $searchMethod) = $search->getFilter(['ID' => ['can_list' => true]]);
+	
+	// Build SQL 'from' chunk
+	$sqlFrom = ("$cteName AS A INNER JOIN " . safe_pfx_j('textpattern') . ' AS B ON (A.ID = B.ID)');
+	
+	// Calculate total
+	if ($crit) {
+	    // Include the full join since the criteria may include fields from any table
+	    $total = getThing("$sqlCTE SELECT COUNT(*) FROM $sqlFrom" .
+			      (empty($crit) ? '' : " WHERE $sqlCriteria"));
+	} else {
+	    // Simpler version if there's no criteria, without the join or the criteria
+	    $total = getThing("$sqlCTE SELECT COUNT(*) FROM $cteName");
+	}
+
+	// Build the search block
+	$searchRenderOptions = ['placeholder' => 'ais_url_alias_search_aliases'];
+	$searchBlock = n.tag($search->renderForm('list',
+						 $searchRenderOptions),
+			     'div',
+			     ['class' => 'txp-layout-4col-3span',
+			      'id' => ($this->event . '_control')]);
+	
+	// Build the paginator
+	$paginator = new \Textpattern\Admin\Paginator($this->event);
+	$limit = $paginator->getLimit();
+	list($page, $offset, $numPages) = pager($total, $limit, $page);
+
+	// Build the content block
+	$contentBlock = '';
+	if ($total <= 0) {
+	    $contentBlock .= graf((span(null, ['class' => 'ui-icon ui-icon-info']) . 
+				   ' ' .
+				   (empty($crit) ? $this->t('no_aliases_configured') : gTxt('no_results_found'))),
+				  ['class' => 'alert-block information']);
+	} else {
+	    // Fetch the rows to display
+	    $resultSet = safe_query("$sqlCTE SELECT A.*, B.Title FROM $sqlFrom WHERE $sqlCriteria ORDER BY $sqlSort LIMIT $offset, $limit");
+	    
+	    // Ensure we got something back
+	    if ($resultSet && 
+		(numRows($resultSet) > 0)) {
+		// Start the multiedit form and the table header
+		$contentBlock .= (n.tag_start('form', ['class'  => 'multi_edit_form',
+						       'id'     => 'ais_url_alias_aliases_form',
+						       'name'   => 'longform',
+						       'method' => 'post',
+						       'action' => 'index.php']) .
+				  n.tag_start('div', ['class'      => 'txp-listtables',
+						      'tabindex'   => 0,
+						      'aria-label' => gTxt('list')]) .
+				  n.tag_start('table', ['class' => 'txp-list']) .
+				  n.tag_start('thead') .
+				  tr(hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+					   '', 
+					   (' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"')) .
+				     column_head('article', 'ID', $this->event, true, $toggleDir, $crit, $searchMethod,
+						 ((($sort === 'ID') ? "$dir " : '') . 'txp-list-col-id')) .
+				     column_head('title', 'Title', $this->event, true, $toggleDir, $crit, $searchMethod,
+						 ((($sort === 'Title') ? "$dir " : '') . 'txp-list-col-title')) .
+				     column_head('ais_url_alias_url_alias', 'C', $this->event, true, $toggleDir, $crit, $searchMethod,
+						 ((($sort === 'C') ? $dir : '')))) .
+				  n.tag_end('thead') .
+				  n.tag_start('tbody'));
+		
+		// Loop through row
+		while ($row = nextRow($resultSet)) {
+		    // Edit URL links back to the article where the URL alias can be edited
+		    $urlEditArticle = ['event' => 'article', 'step' => 'edit', 'ID' => $row['ID']];
+		    
+		    // Add this row to a content block
+		    $contentBlock .= (tr(td(fInput('checkbox', 'selected[]', $row['ID'],
+					    '', 
+					    'txp-list-col-multi-edit') .
+					 hCell(href($row['ID'], $urlEditArticle, (' title="' . gTxt('edit') . '"')), 
+					       '', 
+					       ' class="txp-list-col-id" scope="row"') .
+					 td(href(txpspecialchars($row['Title']), $urlEditArticle, (' title="' . gTxt('edit') . '"')), 
+					    '', 
+					    'txp-list-col-title') .
+					 td($row['C']))));
+		}
+	    
+	        // Finish the table and the content block
+		// TODO: Multiedit controls
+		$contentBlock .= (n.tag_end('tbody') .
+				  n.tag_end('table') .
+				  n.tag_end('div') .
+				  tInput() .
+				  n.tag_end('form'));
+	    }
+	}
+	
+	// Build the pagination block
+	$pageBlock = ($paginator->render() .
+		      nav_form($this->event, $page, $numPages, $sort, $dir, $crit, $searchMethod, $total, $limit));
+
+	// Render out the table
+	$table = new \Textpattern\Admin\Table($this->event);
+	echo $table->render(compact('title', 'total', 'crit'), $searchBlock, null, $contentBlock, $pageBlock);
     }
 
     
