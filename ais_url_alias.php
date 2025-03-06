@@ -472,16 +472,17 @@ class ais_url_alias
 	global $pretext;
 	
 	$requestURI = $pretext['request_uri'];
+	$queryString = $pretext['qs'];
 	
 	// Sanity check - we should have the request URI at this point
 	if (isset($requestURI) &&
 	    ($requestURI != '')) {
 	    // Clean the request URI
-	    $requestURI = ltrim($requestURI, '/');
+	    $requestURI = ltrim(explode('?', $requestURI)[0], '/');
 	    
 	    // Build the where clause
 	    $where = $this->sqlWhere($requestURI);
-		
+	    
 	    // If there's no where clause, that means the plugin is probably not configured yet (nothing to do)
 	    if ($where != '') {
 		// We only want exactly one live article
@@ -496,7 +497,11 @@ class ais_url_alias
 		    // If we have a URL, let's bounce.
 		    if (isset($newURL) &&
 			(strlen($newURL) > 0)) {
-			$this->bounce($newURL);
+			if (strlen($queryString) > 0) {
+			    $this->bounce($newURL . '?' . $queryString);
+			} else {
+			    $this->bounce($newURL);
+			}
 		    }
 		}
 	    }
