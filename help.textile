@@ -378,8 +378,8 @@ p. New functionality:
 * Added URL aliases list panel to view and search configured aliases ^["#8":https://github.com/alieninternet/ais_url_alias/issues/8]^
 * Added ability to bulk remove URL aliases via the URL aliases list panel ^["#9":https://github.com/alieninternet/ais_url_alias/issues/9]^
 * Added French translation (["cara-tm":https://github.com/cara-tm]) ^["#1":https://github.com/alieninternet/ais_url_alias/issues/1]^
-* Added German translation (["jools-r":https://github.com/jools-r]) ^["#3":https://github.com/alieninternet/ais_url_alias/issues/3]^
-* Added Dutch translation ^["#2":https://github.com/alieninternet/ais_url_alias/issues/2]^
+* Added German translation (["jools-r":https://github.com/jools-r], uli) ^["#2":https://github.com/alieninternet/ais_url_alias/issues/2]^
+* Added Dutch translation ^["#3":https://github.com/alieninternet/ais_url_alias/issues/3]^
 
 p. Fixes:
 
