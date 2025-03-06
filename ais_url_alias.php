@@ -212,7 +212,7 @@ class ais_url_alias
 			
 			// Check for invalid values
 			$resultSet = safe_query($sqlCTE . 'SELECT DISTINCT ID, C FROM ' . $cteName . 
-						' WHERE C NOT REGEXP \'' . safe_escape(self::REGEX_URL_ALIAS_PATH) . '\' ORDER BY ID ASC;');
+						' WHERE (C NOT REGEXP \'' . safe_escape(self::REGEX_URL_ALIAS_PATH) . '\') ORDER BY ID ASC;');
 			if ($resultSet &&
 			    (numRows($resultSet) > 0)) {
 			    while ($row = nextRow($resultSet)) {
