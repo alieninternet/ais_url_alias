@@ -97,7 +97,6 @@ ais_url_alias_prefs_title_custom => Champs personnalisés
 ais_url_alias_prefs_used_field => Utilisé pour les alias d'URL
 ais_url_alias_see_plugin_configuration => Voir la configuration du plugin.
 ais_url_alias_url_aliases = Alias d'URL
-#@ais_url_alias  
 #@language nl, nl-nl
 ais_url_alias_diag_no_duplicate_aliases => Geen dubbele URL-aliasen gevonden.  
 ais_url_alias_diag_no_invalid_alias_format => Geen URL-aliasen met een ongeldig formaat gevonden.  
