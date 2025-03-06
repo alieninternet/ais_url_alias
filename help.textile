@@ -381,6 +381,7 @@ p. New functionality:
 p. Fixes:
 
 * Code quality fixes
+* Fix for empty URL aliases showing as duplicates in diagnostics ^["#6":https://github.com/alieninternet/ais_url_alias/issues/6]^
 
 h3. Version 0.1
 
