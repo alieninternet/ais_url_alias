@@ -153,13 +153,8 @@ class ais_url_alias
 		    }
 		}
 
-		// Set the location header and response code
-		txp_status_header($statusCode . ' ' . $statusText);
-		header('Location: ' . $newURL);
-		
-		// End rendering here
-		ob_flush();
-		exit();
+		// Set the location header and response code and die gracefully
+		txp_die($statusText, $statusCode, $newURL);
 	    }
 	}
     }
