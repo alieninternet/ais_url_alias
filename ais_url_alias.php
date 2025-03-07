@@ -175,6 +175,24 @@ class ais_url_alias
     
     
     /**
+     * Event handler for article validation on save/publish
+     * 
+     * @param  string $event   Textpattern event
+     * @param  string $step    Textpattern step (action)
+     * @param  mixed  $data    Callback payload data
+     * @param  mixed  $options Callback payload options -> validation constraints
+     */
+    public function eventArticleValidate($event, $step, &$data, &$options) : void
+    {
+	assert(($event === 'article_ui') &&
+	       (($step === 'validate_publish') ||
+		($step === 'validate_safe')));
+	
+	// TODO: This
+    }
+    
+    
+    /**
      * Event handler for installation diagnostics
      *
      * @param  string $event Textpattern event
@@ -562,6 +580,8 @@ class ais_url_alias
 	}
 	
 	// Register callbacks
+        register_callback(array($this, 'eventArticleValidate'), 'article_ui', 'validate_publish');
+        register_callback(array($this, 'eventArticleValidate'), 'article_ui', 'validate_save');
         register_callback(array($this, 'eventDiag'), 'diag');
 	register_callback(array($this, 'eventHead'), 'admin_side', 'head_end');
         register_callback(array($this, 'eventLifecycle'), ('plugin_lifecycle.' . $this->event));
