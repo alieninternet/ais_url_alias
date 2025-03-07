@@ -211,7 +211,7 @@ class ais_url_alias
 			    (numRows($resultSet) > 0)) {
 			    while ($row = nextRow($resultSet)) {
 				$output[] = [self::DIAG_ERROR,
-					     $this->t('error_duplicate_alias',
+					     $this->t('diag_error_duplicate_alias',
 						      ['{article}' => eLink('article', 'edit', 'ID', $row['ID'], $row['ID']),
 						       '{alias}' => htmlspecialchars($row['C'])],
 						      false)];
@@ -227,7 +227,7 @@ class ais_url_alias
 			    (numRows($resultSet) > 0)) {
 			    while ($row = nextRow($resultSet)) {
 				$output[] = [self::DIAG_ERROR,
-					     $this->t('error_invalid_alias_format',
+					     $this->t('diag_error_invalid_alias_format',
 						      ['{article}' => eLink('article', 'edit', 'ID', $row['ID'], $row['ID']),
 						       '{alias}' => htmlspecialchars($row['C'])],
 						      false)];
