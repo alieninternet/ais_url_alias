@@ -395,7 +395,7 @@ h3. Version 0.2
 
 p. New functionality:
 
-* URL query strings now get passed through the redirection from alias to permalink ^["#7":https://github.com/alieninternet/ais_url_alias/issues/7]^
+* URL query strings are now passed through the redirection from alias to permalink ^["#7":https://github.com/alieninternet/ais_url_alias/issues/7]^
 * Added URL aliases list panel to view and search configured aliases ^["#8":https://github.com/alieninternet/ais_url_alias/issues/8]^
 * Added ability to bulk remove URL aliases via the URL aliases list panel ^["#9":https://github.com/alieninternet/ais_url_alias/issues/9]^
 * Improved validation ^["#10":https://github.com/alieninternet/ais_url_alias/issues/10]^
