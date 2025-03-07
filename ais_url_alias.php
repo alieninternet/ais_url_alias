@@ -49,6 +49,41 @@ switch (txpinterface) {
 
 
 /**
+ * Regex validation constraint (not provided by Textpattern API)
+ */
+class ais_url_alias_RegexConstraint extends \Textpattern\Validator\Constraint
+{
+    /**
+     * Constructor.
+     *
+     * @param mixed $value   The value to validate
+     * @param array $options Key/value pair containing options - 'regex' for the regular expression to include, 'message' for a custom error message
+     */
+    public function __construct($value, $options = [])
+    {
+	// Merge options provided with local defaults
+	$options = lAtts(['message' => '',
+			  'regex' => ''],
+			 $options, 
+			 false);
+	
+	parent::__construct($value, $options);
+    }
+    
+    
+    /**
+     * Validate a given value against this constraint.
+     *
+     * @return bool When true, the 
+     */
+    public function validate()
+    {
+	return preg_match($this->options['regex'], $this->value) >= 1;
+    }
+}
+
+
+/**
  * Support class
  */
 class ais_url_alias
