@@ -223,7 +223,22 @@ class ais_url_alias
 	       (($step === 'validate_publish') ||
 		($step === 'validate_safe')));
 	
-	// TODO: This
+	// Ensure preferences are loaded
+	$this->getPrefs();
+	
+	// PHP regular expressions need to be wrapped up in a delimiter
+	$regex = ('[' . self::REGEX_URL_ALIAS_PATH . ']');
+	
+	// Loop through configured custom fields
+	foreach ($this->customFields as $customField) {
+	    if (is_numeric($customField)) {
+		$customFieldName = ('custom_' . $customField);
+		$options[$customFieldName] =
+		  new ais_url_alias_RegexConstraint($data[$customFieldName],
+						    ['message' => 'ais_url_alias_error_invalid_alias_format',
+						     'regex' => $regex]);
+	    }
+	}
     }
     
     
