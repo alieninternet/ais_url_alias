@@ -49,7 +49,9 @@ switch (txpinterface) {
 
 
 /**
- * Regex validation constraint (not provided by Textpattern API)
+ * Regex validation constraint (not provided by Textpattern API before version 4.9.0)
+ *
+ * This will be obsolete in Textpattern 4.9.0 (replaced with \Textpattern\Validator\PatternConstraint)
  */
 class ais_url_alias_RegexConstraint extends \Textpattern\Validator\Constraint
 {
@@ -223,6 +225,8 @@ class ais_url_alias
 	       (($step === 'validate_publish') ||
 		($step === 'validate_safe')));
 	
+	global $txp_version;
+	
 	// Ensure preferences are loaded
 	$this->getPrefs();
 	
@@ -233,10 +237,20 @@ class ais_url_alias
 	foreach ($this->customFields as $customField) {
 	    if (is_numeric($customField)) {
 		$customFieldName = ('custom_' . $customField);
-		$options[$customFieldName] =
-		  new ais_url_alias_RegexConstraint($data[$customFieldName],
-						    ['message' => 'ais_url_alias_error_invalid_alias_format',
-						     'regex' => $regex]);
+		
+		// If we are running on Textpattern 4.9.0 we can use standard functionality
+		if (version_compare($txp_version, '4.9.0', '>=')) {
+		    $options[$customFieldName] =
+		      new \Textpattern\Validator\PatternConstraint($data[$customFieldName],
+								   ['message' => 'ais_url_alias_error_invalid_alias_format',
+								    'pattern' => $regex]);
+		} else {
+		    // Use a built-in validator
+		    $options[$customFieldName] =
+		      new ais_url_alias_RegexConstraint($data[$customFieldName],
+							['message' => 'ais_url_alias_error_invalid_alias_format',
+							 'regex' => $regex]);
+		}
 	    }
 	}
     }
