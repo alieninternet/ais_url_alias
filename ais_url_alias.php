@@ -177,8 +177,8 @@ class ais_url_alias
     /**
      * Event handler for installation diagnostics
      *
-     * @param  string $evt Textpattern event
-     * @param  string $stp Textpattern step (action)
+     * @param  string $event Textpattern event
+     * @param  string $step  Textpattern step (action)
      */
     public function eventDiag($event, $step) : void
     {
