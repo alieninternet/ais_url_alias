@@ -182,9 +182,10 @@ class ais_url_alias
      */
     public function eventDiag($event, $step) : void
     {
+	assert($event === 'diag');
+	
 	// Ensure we have the right event/step
-	if (($event === 'diag') &&
-	    ($step !== 'steps')) {
+	if ($step !== 'steps') {
 	    $output = [];
 	    
 	    $this->getPrefs();
@@ -294,6 +295,9 @@ class ais_url_alias
      */
     public function eventHead($event, $step) : void
     {
+	assert(($event === 'admin_side') &&
+	       ($step === 'head_end'));
+	
 	global $event;
 	$css = [];
 	$js = [];
@@ -373,6 +377,8 @@ class ais_url_alias
      */
     public function eventLifecycle($event, $step) : string
     {
+	assert($event === ('plugin_lifecycle.' . $this->event));
+	
 	$result = '';
 	
 	switch ($step) {
@@ -404,6 +410,8 @@ class ais_url_alias
      */
     public function eventPanelAliases($event, $step) : void
     {
+	assert($event === $this->event);
+	
 	$availableSteps = [
 		'list' => false,
 		'multiedit' => true,
@@ -434,6 +442,8 @@ class ais_url_alias
      */
     public function eventPanelPrefs($event, $step) : void
     {
+	assert($event === ('plugin_prefs.' . $this->event));
+	
 	$availableSteps = [
 		'list' => false,
 		'save' => true
