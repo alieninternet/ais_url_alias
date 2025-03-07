@@ -751,8 +751,8 @@ class ais_url_alias
      */
     private function panelAliasesList($message = '') : void
     {
-	$title = $this->t('url_aliases');
-	pagetop($title, $message);
+	$heading = $this->t('url_aliases');
+	pagetop($heading, $message);
 
 	// Table fields
 	$tableFields = ['ID', 'Title', 'C'];
@@ -919,7 +919,7 @@ class ais_url_alias
 
 	// Render out the table
 	$table = new \Textpattern\Admin\Table($this->event);
-	echo $table->render(compact('title', 'total', 'crit'), $searchBlock, null, $contentBlock, $pageBlock);
+	echo $table->render(compact('heading', 'total', 'crit'), $searchBlock, null, $contentBlock, $pageBlock);
     }
     
     
@@ -942,13 +942,13 @@ class ais_url_alias
      */
     private function panelPrefsList($message = '') : void
     {
-	$title = $this->t('prefs_title');
-	pagetop($title, $message);
+	$heading = $this->t('prefs_title');
+	pagetop($heading, $message);
 	$pageContent = '';
 	
 	// Build the page title
 	$titleContent =
-	  tag(hed($title, 1, ['class' => 'txp-heading']),
+	  tag(hed($heading, 1, ['class' => 'txp-heading']),
 	      'div',
 	      ['class' => 'txp-layout-1col']);
 	
