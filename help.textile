@@ -2,7 +2,7 @@ h1. ais_url_alias
 
 p. URL aliases for Textpattern, also known as friendly paths, legacy paths, or legacy permalinks.
 
-p. *Version:* 0.2
+p. *Version:* 0.3
 
 h2. List of features
 
@@ -390,6 +390,12 @@ p. If the disclaimer of warranty and limitation of liability provided above cann
 p. END OF TERMS AND CONDITIONS
 
 h2. History
+
+h3. Version 0.3
+
+p. Fixes:
+
+* Fixed minor issue with saving the redirection status, it now only updates the database if changed.
 
 h3. Version 0.2
 
