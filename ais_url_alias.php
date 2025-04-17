@@ -1069,7 +1069,7 @@ class ais_url_alias
 	// Get existing preferences
 	$this->getPrefs();
 	$oldCustomFields = $this->customFields;
-	$oldRedirectPermament = $this->redirectPermanent;
+	$oldRedirectPermanent = $this->redirectPermanent;
 	$oldShowArticleCustomFieldValidity = $this->showArticleCustomFieldValidity;
 
 	// Fetch custom field toggles
