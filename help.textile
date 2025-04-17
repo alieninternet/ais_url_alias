@@ -396,7 +396,7 @@ h3. Version 0.3
 p. Fixes:
 
 * Improved performance for redirects by triggering the redirection test at an earlier point in the page rendering
-* Fixed minor issue with saving the redirection status, it now only updates the database if changed.
+* Fixed minor issue with saving the redirection status, it now only updates the database if changed
 
 h3. Version 0.2
 
