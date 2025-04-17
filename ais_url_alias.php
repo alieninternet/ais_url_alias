@@ -43,7 +43,7 @@ switch (txpinterface) {
     }
     
     // Register callback(s)
-    register_callback('ais_url_alias_handler', 'textpattern');
+    register_callback('ais_url_alias_handler', 'pretext_end', '', 1);
     break;
 }
 
@@ -577,7 +577,7 @@ class ais_url_alias
     static public function handlePublicEvent($event) : void
     {
 	// Sanity check: We only handle the "textpattern" (= rendering) callback.
-	if ($event == 'textpattern') {
+	if ($event == 'pretext_end') {
 	    $handler = new ais_url_alias();
 	    $handler->handleRender();
 	}
