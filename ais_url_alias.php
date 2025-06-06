@@ -130,7 +130,7 @@ class ais_url_alias
      * Regular expressions (validation)
      */
      // This pattern follows RFC3986, avoiding a '/' prefix, and forbidding invalid %nn escapes and disallowing #
-    const REGEX_URL_ALIAS_PATH = '^[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@%\\-](?:[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@\\/\\-]|%[0-9a-fA-F]{2})*$';
+    const REGEX_URL_ALIAS_PATH = '^(?:[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@%\\-](?:[a-zA-Z0-9._~!$&\'\\(\\)*+,;=:@\\/\\-]|%[0-9a-fA-F]{2})*)?$';
     
     
     /**
