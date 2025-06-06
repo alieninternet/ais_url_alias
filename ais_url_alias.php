@@ -1,4 +1,3 @@
-
 <?php
 /**
  * ais_url_alias - URL aliases for Textpattern
