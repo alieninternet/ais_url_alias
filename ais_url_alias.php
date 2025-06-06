@@ -1,3 +1,4 @@
+
 <?php
 /**
  * ais_url_alias - URL aliases for Textpattern
@@ -20,7 +21,7 @@
  * @author	Ashley Butcher (Alien Internet Services)
  * @copyright   Copyright (C) 2025 Ashley Butcher (Alien Internet Services)
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License version 3
- * @version	0.3
+ * @version	0.4
  * @link	https://github.com/alieninternet/ais_url_alias/
  */
 
