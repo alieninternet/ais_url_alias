@@ -225,8 +225,6 @@ class ais_url_alias
 	       (($step === 'validate_publish') ||
 		($step === 'validate_safe')));
 	
-	global $txp_version;
-	
 	// Ensure preferences are loaded
 	$this->getPrefs();
 	
@@ -239,7 +237,7 @@ class ais_url_alias
 		$customFieldName = ('custom_' . $customField);
 		
 		// If we are running on Textpattern 4.9.0 we can use standard functionality
-		if (version_compare($txp_version, '4.9.0', '>=')) {
+		if (version_compare(txp_version, '4.9.0', '>=')) {
 		    $options[$customFieldName] =
 		      new \Textpattern\Validator\PatternConstraint($data[$customFieldName],
 								   ['message' => 'ais_url_alias_error_invalid_alias_format',

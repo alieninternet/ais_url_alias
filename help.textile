@@ -395,7 +395,7 @@ h3. Version 0.4
 
 p. Fixes:
 
-* 
+* Fix issue with Textpattern 4.9.x compatibility on PHP 8.x
 
 h3. Version 0.3
 
